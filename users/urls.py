@@ -1,32 +1,29 @@
+from django.contrib.auth.views import LoginView
 from django.urls import path
-from rest_framework.permissions import AllowAny
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from users.apps import UsersConfig
+from users.forms import UserAuthForm
 from users.views import (
-    UserCreateApiView,
-    UserDeleteApiView,
-    UserListApiView,
-    UserRetrieveApiView,
-    UserUpdateApiView,
+    RegisterView,
+    UserInValidEmail,
+    UserPasswordResetView,
+    email_verification,
+    logout_view,
+    ProfileView,
 )
 
 app_name = UsersConfig.name
 
 urlpatterns = [
     path(
-        "login/",
-        TokenObtainPairView.as_view(permission_classes=(AllowAny,)),
+        "",
+        LoginView.as_view(template_name="users/login.html", form_class=UserAuthForm),
         name="login",
     ),
-    path(
-        "token/refresh/",
-        TokenRefreshView.as_view(permission_classes=(AllowAny,)),
-        name="token_refresh",
-    ),
-    path("<int:pk>/update/", UserUpdateApiView.as_view(), name="user_update"),
-    path("<int:pk>/delete/", UserDeleteApiView.as_view(), name="user_delete"),
-    path("register/", UserCreateApiView.as_view(), name="user_register"),
-    path("list/", UserListApiView.as_view(), name="user_list"),
-    path("retrieve/<int:pk>/", UserRetrieveApiView.as_view(), name="user_retrieve"),
+    path("logout/", logout_view, name="logout"),
+    path("registration/", RegisterView.as_view(), name="registration"),
+    path("invalid-email/", UserInValidEmail.as_view(), name="invalid_email"),
+    path("email-confirm/<str:token>/", email_verification, name="email-confirm"),
+    path("reset-password/", UserPasswordResetView.as_view(), name="reset_password"),
+    path("profile/", ProfileView.as_view(), name="profile"),
 ]
