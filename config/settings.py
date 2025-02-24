@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 
 from dotenv import load_dotenv
-from datetime import timedelta
+
 
 load_dotenv()
 
@@ -46,8 +46,6 @@ INSTALLED_APPS = [
     "corsheaders",
     "users",
     "diary",
-    "tags",
-    "notifications",
 ]
 
 MIDDLEWARE = [
@@ -96,19 +94,6 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-REST_FRAMEWORK = {
-    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ],
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-}
-
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-}
 
 STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
 
@@ -181,38 +166,19 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Настройки для Celery
 
-# URL-адрес брокера сообщений
-CELERY_BROKER_URL = os.getenv(
-    "CELERY_BROKER_URL"
-)  # Например, Redis, который по умолчанию работает на порту 6379
-
-# URL-адрес брокера результатов, также Redis
-CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
-
-# Часовой пояс для работы Celery
-CELERY_TIMEZONE = TIME_ZONE
-
-# Флаг отслеживания выполнения задач
-CELERY_TASK_TRACK_STARTED = True
-
-# Максимальное время на выполнение задачи
-CELERY_TASK_TIME_LIMIT = 30 * 60
-
-CELERY_BEAT_SCHEDULE = {
-    "task-name": {
-        "task": "tracker.tasks.habit_to_do_reminder",  # Путь к задаче
-        "schedule": timedelta(minutes=2),
-    },
-}
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
 MEDIA_URL = "/media/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_IMAGE_BACKEND = "pillow"
@@ -268,6 +234,3 @@ CKEDITOR_CONFIGS = {
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-TELEGRAM_URL = "https://api.telegram.org/bot"
-BOT_TOKEN = os.getenv("BOT_TOKEN")

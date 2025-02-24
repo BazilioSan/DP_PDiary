@@ -24,7 +24,7 @@ class User(AbstractUser):
     avatar = models.ImageField(
         upload_to="users/media",
         verbose_name="Аватар",
-        help_text="Загружите фото",
+        help_text="Загрузите фото",
         **NULLABLE,
     )
 
