@@ -8,8 +8,8 @@ from users.models import User
 class Command(BaseCommand):
     def handle(self, *args, **options):
 
-        # email = input("Enter superuser email: ")
-        email = "admin@admin.com"
+        email = input("Enter superuser email: ")
+        # email = "admin@admin.com"
 
         psw1 = getpass.getpass("Enter password: ")
         psw2 = getpass.getpass("Confirm password: ")
